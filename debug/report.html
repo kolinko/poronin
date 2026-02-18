@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street View Research - Debug Report</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; background: #0a0a0a; color: #ccc; line-height: 1.7; padding: 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #ff6b6b; margin-bottom: 8px; }
+h2 { color: #ffd93d; margin: 32px 0 12px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+h3 { color: #6bcbff; margin: 20px 0 8px; }
+h4 { color: #aaa; margin: 16px 0 4px; }
+p, li { margin-bottom: 8px; }
+ul { margin-left: 24px; }
+.subtitle { color: #888; font-size: 0.9em; margin-bottom: 24px; }
+.section { background: #111; border: 1px solid #222; border-radius: 8px; padding: 20px; margin: 16px 0; }
+.error { border-left: 4px solid #ff6b6b; }
+.success { border-left: 4px solid #4ecdc4; }
+.question { border-left: 4px solid #ffd93d; }
+.screenshot { margin: 12px 0; }
+.screenshot img { max-width: 100%; border-radius: 6px; border: 1px solid #333; }
+.screenshot .caption { font-size: 0.85em; color: #888; margin-top: 4px; }
+.coord { font-family: monospace; background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #4ecdc4; }
+.pano-id { font-family: monospace; background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #ffd93d; font-size: 0.85em; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { padding: 8px 12px; text-align: left; border: 1px solid #333; }
+th { background: #1a1a2e; color: #6bcbff; }
+td { background: #111; }
+code { background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #4ecdc4; }
+.map-ascii { font-family: monospace; font-size: 13px; line-height: 1.3; background: #0d0d1a; padding: 16px; border-radius: 8px; white-space: pre; overflow-x: auto; color: #aaa; }
+.map-ascii .road { color: #666; }
+.map-ascii .label { color: #ffd93d; }
+.map-ascii .poi { color: #ff6b6b; }
+.map-ascii .stop { color: #4ecdc4; font-weight: bold; }
+a { color: #6bcbff; }
+.step { background: #0d0d1a; padding: 12px 16px; margin: 8px 0; border-radius: 6px; border-left: 3px solid #444; }
+.step-num { color: #ffd93d; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Street View Research - Debug Report</h1>
+<div class="subtitle">Pickup spots for XXIII Poronin Zima 2026 | Generated 2026-02-18</div>
+
+<!-- ============================================ -->
+<h2>1. My Mental Model of the Geography</h2>
+<!-- ============================================ -->
+
+<div class="section question">
+<h3>How I navigated Street View</h3>
+<p>I can't "walk" in Street View - arrow keys and click-to-move don't work via Chrome DevTools MCP. My workaround was:</p>
+<ol>
+<li>Search for a <strong>place or address</strong> on Google Maps (e.g., "Dodo Pizza Jana Pawla II")</li>
+<li>Click the <strong>"Street View" button</strong> on the place card to enter SV at that address</li>
+<li>Extract the <strong>panorama ID</strong> from the URL</li>
+<li>Navigate to the same panorama with different <strong>heading</strong> values (0=N, 90=E, 180=S, 270=W) to look in different directions</li>
+<li>To "move" to a new position, search for a <strong>different nearby address</strong> and repeat</li>
+</ol>
+<p>This means I can only see Street View at locations where Google has a place/address with SV coverage. I can't explore freely between these points.</p>
+</div>
+
+<!-- ============================================ -->
+<h2>2. Rondo ONZ / Dodo Pizza Area (Magda)</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<h3>My mental map of the area</h3>
+<div class="map-ascii">
+                    NORTH
+                      ↑
+                      |
+          JP2 #20     |     JP2 #20 (east side)
+        <span class="coord">52.2347, 20.998</span>  |   <span class="poi">TRYCHOLOGIA clinic</span>
+        <span class="pano-id">nksxhPQqTZlZVDL6ZC7fEQ</span>
+              |       |
+              |  al.  |  service
+              | Jana  |   road
+              |Pawła  |  (east)
+              |  II   |
+              |       |
+          JP2 #18     |     JP2 #18 (east side)
+        <span class="coord">52.2339, 20.998</span>  |   <span class="poi">DODO PIZZA</span>, Carrefour, Shanga
+        <span class="pano-id">3GGPaDquh6yJRtueKxGkXw</span>
+              |       |
+    ──────────+───────+──────── <span class="label">ul. TWARDA</span> (east-west)
+              |       |
+              |       |
+              ↓       ↓
+            SOUTH (toward Rondo ONZ)
+</div>
+<p><strong>My assumption:</strong> al. Jana Pawła II runs north-south. Dodo Pizza is on the east-side service road, at #18. The JP2 #20 panorama is ~90m north of Dodo Pizza. ul. Twarda crosses JP2 just south of Dodo Pizza.</p>
+</div>
+
+<div class="section question">
+<h3>Known issue: Handicapped parking</h3>
+<p>User pointed out the only parking spot near Dodo Pizza is handicapped. I didn't notice this in Street View. Let me show all screenshots from this area so you can see what I saw:</p>
+</div>
+
+<h3>Panorama 1: Dodo Pizza (JP2 #18)</h3>
+<p>Coordinates: <span class="coord">52.2338763, 20.9982779</span> | Panorama: <span class="pano-id">3GGPaDquh6yJRtueKxGkXw</span></p>
+<p>Searched for: <code>"Dodo Pizza al Jana Pawla II Warszawa"</code> → clicked "Street View" on place card</p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dodo-east.jpg" alt="Dodo Pizza - looking east (heading 90)">
+<div class="caption"><strong>Heading 90° (East)</strong> - Dodo Pizza storefront. Orange "DODO PIZZA" sign clearly visible. Carrefour + Shanga to the right.</div>
+</div>
+<div class="screenshot">
+<img src="dodo-north-stop.jpg" alt="Dodo Pizza - looking north (heading 10)">
+<div class="caption"><strong>Heading 10° (NNE)</strong> - Service road looking north from Dodo Pizza. Shows curb, shops, PEPSI sign. <strong>This is the image I used for "stop here".</strong></div>
+</div>
+</div>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dodo-south.jpg" alt="Dodo Pizza - looking south (heading 180)">
+<div class="caption"><strong>Heading 180° (South)</strong> - Looking south toward ul. Twarda / Rondo ONZ direction.</div>
+</div>
+<div class="screenshot">
+<img src="dodo-west.jpg" alt="Dodo Pizza - looking west (heading 270)">
+<div class="caption"><strong>Heading 270° (West)</strong> - Looking west across al. Jana Pawła II main avenue.</div>
+</div>
+</div>
+
+<h3>Panorama 2: JP2 #20 (~90m north of Dodo Pizza)</h3>
+<p>Coordinates: <span class="coord">52.2347313, 20.9980099</span> | Panorama: <span class="pano-id">nksxhPQqTZlZVDL6ZC7fEQ</span></p>
+<p>Searched for: <code>"Jana Pawla II 20 Warszawa"</code> → clicked "Street View"</p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="jp2-20-east-service.jpg" alt="JP2 #20 - looking east (heading 90)">
+<div class="caption"><strong>Heading 90° (East)</strong> - TRYCHOLOGIA clinic, apartment block. I'm on the service road looking at the building.</div>
+</div>
+<div class="screenshot">
+<img src="jp2-20-south-service.jpg" alt="JP2 #20 - looking south (heading 170)">
+<div class="caption"><strong>Heading 170° (SSE)</strong> - Service road south toward Dodo Pizza. Blue bollards, red bus lane, mural on building.</div>
+</div>
+</div>
+<div class="grid-2">
+<div class="screenshot">
+<img src="jp2-20-north-service.jpg" alt="JP2 #20 - looking north (heading 350)">
+<div class="caption"><strong>Heading 350° (NNW)</strong> - Service road north. <span style="color: #ff6b6b; font-weight: bold;">NO STOPPING SIGN visible!</span> Cars parked on right. High-rises ahead.</div>
+</div>
+<div class="screenshot">
+<img src="jp2-20-west.jpg" alt="JP2 #20 - looking west (heading 270)">
+<div class="caption"><strong>Heading 270° (West)</strong> - Looking west across main JP2 avenue.</div>
+</div>
+</div>
+
+<div class="section error">
+<h3>My mistakes / uncertainties for Rondo ONZ</h3>
+<ul>
+<li><strong>Didn't spot handicapped parking</strong> - Where exactly is it? Near Dodo Pizza on the service road?</li>
+<li><strong>No-stopping sign at JP2 #20</strong> - I saw this but didn't factor it well. If the no-stopping zone extends south to Dodo Pizza, there may be no legal curb stop.</li>
+<li><strong>Only 2 SV positions along ~100m of road</strong> - I could only get SV at JP2 #18 and #20. Couldn't explore between them or on side streets.</li>
+<li><strong>Didn't explore ul. Twarda itself</strong> - The Twarda/JP2 intersection might have stopping spots I never saw.</li>
+<li><strong>Didn't explore the WEST side of JP2</strong> - Maybe there's a better pullover on the other side of the avenue?</li>
+<li><strong>Don't know which metro exit is closest to which street</strong> - I assumed Dodo Pizza = the obvious meeting point, but maybe the metro exit + actual stopping spot should be coordinated differently.</li>
+</ul>
+</div>
+
+<!-- ============================================ -->
+<h2>3. Słomińskiego 19 / Dzika Area (Marta)</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<h3>My mental map of the area</h3>
+<div class="map-ascii">
+                    NORTH
+                      ↑
+                      |
+    <span class="label">ul. SŁOMIŃSKIEGO</span> ═══════════════════ (east-west, busy DW631)
+                      |
+              <span class="poi">Słomińskiego 19</span> (clinic)
+              <span class="coord">52.2550, 20.9845</span>
+              <span class="pano-id">FlW1LM0IbGMh5RS5uKThGQ</span>
+                      |
+                      |  ~155m latitude diff
+                      |  (Google says 78m walk)
+                      |
+              <span class="stop">Dzika 19</span> (my proposed stop)
+              <span class="coord">52.2536, 20.9846</span>
+              <span class="pano-id">mzKD8tPgs5qIEdqIP2XDZg</span>
+                      |
+          <span class="label">ul. DZIKA</span>  (north-south, calm residential)
+                      |
+              Dzika / Biedronka area
+              <span class="coord">52.2528, 20.9872</span>
+              <span class="pano-id">R3ntO-LPLSRfhFUeX2A-5w</span>
+                      |
+                      ↓ SOUTH
+</div>
+
+<p><strong>My assumptions:</strong></p>
+<ul>
+<li>Słomińskiego runs east-west. Dzika runs north-south.</li>
+<li>Dzika 19 (<span class="coord">52.2536</span>) is SOUTH of Słomińskiego 19 (<span class="coord">52.2550</span>) because lower latitude = further south.</li>
+<li>Google Maps said Dzika 19 → Słomińskiego 19 = 78m, 1 min walk "przez Dzika" (through Dzika).</li>
+<li>Dzika and Słomińskiego have almost identical longitude (~20.9845), so they're on the same north-south line.</li>
+</ul>
+</div>
+
+<div class="section error">
+<h3>User says: "the place you've shown is not to the south of clinic"</h3>
+<p>This contradicts my model. Possible explanations:</p>
+<ul>
+<li><strong>My panorama coordinates are wrong</strong> - Maybe the SV panorama at "Dzika 19" isn't actually at Dzika 19? Google SV can snap to the nearest available panorama which might be elsewhere.</li>
+<li><strong>The Street View images face the wrong way</strong> - Maybe what I labeled "north" in the screenshots is actually a different direction?</li>
+<li><strong>Dzika doesn't connect straight north to Słomińskiego</strong> - Maybe there's a bend, a park, buildings, or a roundabout between them that makes the relationship non-obvious?</li>
+<li><strong>The "south" in my description is geographically correct but practically misleading</strong> - Maybe "walk south on Dzika" isn't the right instruction because the actual path is different?</li>
+<li><strong>I'm fundamentally wrong about the street layout</strong> - Maybe Dzika and Słomińskiego don't intersect in the way I think?</li>
+</ul>
+</div>
+
+<h3>Google Maps Directions (evidence for my model)</h3>
+<div class="screenshot">
+<img src="dzika19-to-slom19-directions.jpg" alt="Google Maps walking directions">
+<div class="caption">Google Maps says: Dzika 19 → Słomińskiego 19 = <strong>1 min, 78m, "przez: Dzika"</strong>. This was my primary evidence that Dzika 19 is close to Słomińskiego 19.</div>
+</div>
+
+<h3>Satellite maps I looked at</h3>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika-slominskiego-map.jpg" alt="Satellite view of Dzika-Słomińskiego area">
+<div class="caption">Satellite view centered at <span class="coord">52.2548, 20.9855</span>, zoom 18. I can see "Rondo Radosława" roundabout, "Domino's Pizza", "Dzika" label at bottom.</div>
+</div>
+<div class="screenshot">
+<img src="dzika-stawki-map.jpg" alt="Wider satellite view showing Dzika and Stawki">
+<div class="caption">Wider view at <span class="coord">52.2545, 20.9845</span>, zoom 17. Shows "Dzika" at bottom, "Rondo Radosława '07" at left, area between them.</div>
+</div>
+</div>
+
+<h3>Panorama 3: Dzika 19 (my proposed stop)</h3>
+<p>Coordinates per SV: <span class="coord">52.2535711, 20.9845617</span> | Panorama: <span class="pano-id">mzKD8tPgs5qIEdqIP2XDZg</span></p>
+<p>Searched for: <code>"Dzika 19 Warszawa"</code> → Google found "19 Dzika, Warszawa" → clicked "Street View"</p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika19-west.jpg" alt="Dzika 19 - heading 270 (West)">
+<div class="caption"><strong>Heading 270° (West)</strong> - "DZIKA" painted on road. Cars parked both sides. Intersection ahead with traffic lights. <strong>THIS was my hero image.</strong></div>
+</div>
+<div class="screenshot">
+<img src="dzika19-north-wide.jpg" alt="Dzika 19 - heading 350 (NNW)">
+<div class="caption"><strong>Heading 350° (NNW)</strong> - Looking north. Van + silver car. Crosswalk, no-entry sign. I assumed Słomińskiego is in this direction.</div>
+</div>
+</div>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika19-south.jpg" alt="Dzika 19 - heading 180 (South)">
+<div class="caption"><strong>Heading 180° (South)</strong> - Looking south. White car, delivery van, trees. Residential feel.</div>
+</div>
+<div class="screenshot">
+<img src="dzika19-east.jpg" alt="Dzika 19 - heading 90 (East)">
+<div class="caption"><strong>Heading 90° (East)</strong> - Looking east along a cross street. Trees, parked cars. "Dzika" label visible on ground at bottom-left.</div>
+</div>
+</div>
+
+<h3>Panorama 4: Dzika / Biedronka (further south on Dzika)</h3>
+<p>Coordinates: <span class="coord">52.2527834, 20.9871536</span> | Panorama: <span class="pano-id">R3ntO-LPLSRfhFUeX2A-5w</span></p>
+<p>Searched for: <code>"Biedronka Dzika Warszawa"</code></p>
+<p><em>Note: this is 170m from Słomińskiego 19 - I considered it too far and moved to Dzika 19 instead.</em></p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika-biedronka-sv.jpg" alt="Dzika/Biedronka area">
+<div class="caption">Street View at Biedronka/Dzika. Shows the street with buildings.</div>
+</div>
+<div class="screenshot">
+<img src="dzika-north.jpg" alt="Dzika looking north from Biedronka">
+<div class="caption">Looking north from Biedronka area. Calm street, P (parking) sign visible, cars on both sides.</div>
+</div>
+</div>
+
+<div class="section question">
+<h3>Key questions for debugging my mental model</h3>
+<ol>
+<li><strong>Is Dzika 19 actually south of Słomińskiego 19?</strong> Google says lat 52.2536 vs 52.2550. Lower lat = south. Google confirms 78m walk. Where is my model wrong?</li>
+<li><strong>Does Dzika even connect directly to Słomińskiego?</strong> Is there a building, park, roundabout, or barrier between them?</li>
+<li><strong>Is the panorama at "Dzika 19" actually ON Dzika?</strong> The heading-270 view shows "Dzika" painted on the road, which seems to confirm it. But SV panoramas can be on nearby streets.</li>
+<li><strong>What does the west view (heading 270) actually show?</strong> I labeled it "west" based on the heading value. Is this correct or am I misinterpreting directions?</li>
+<li><strong>Where should the actual stop be?</strong> The user suggested "from dzika" - is there a specific part of Dzika that works better?</li>
+</ol>
+</div>
+
+<!-- ============================================ -->
+<h2>4. All Panorama IDs I Collected</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<table>
+<tr><th>Location</th><th>Panorama ID</th><th>Coordinates</th><th>Search query used</th></tr>
+<tr><td>Dodo Pizza (JP2 #18)</td><td><span class="pano-id">3GGPaDquh6yJRtueKxGkXw</span></td><td><span class="coord">52.2338763, 20.9982779</span></td><td>"Dodo Pizza al Jana Pawla II"</td></tr>
+<tr><td>JP2 #20</td><td><span class="pano-id">nksxhPQqTZlZVDL6ZC7fEQ</span></td><td><span class="coord">52.2347313, 20.9980099</span></td><td>"Jana Pawla II 20 Warszawa"</td></tr>
+<tr><td>Narbutta 32</td><td><span class="pano-id">aV1IRla03sNi-3mnJbiL1A</span></td><td><span class="coord">52.2061153, 21.0149643</span></td><td>"Narbutta 32 Warszawa"</td></tr>
+<tr><td>Słomińskiego 19</td><td><span class="pano-id">FlW1LM0IbGMh5RS5uKThGQ</span></td><td><span class="coord">52.2549768, 20.9845173</span></td><td>"Słomińskiego 19 Warszawa"</td></tr>
+<tr><td>Dzika / Biedronka</td><td><span class="pano-id">R3ntO-LPLSRfhFUeX2A-5w</span></td><td><span class="coord">52.2527834, 20.9871536</span></td><td>"Biedronka Dzika Warszawa"</td></tr>
+<tr><td>Dzika 19</td><td><span class="pano-id">mzKD8tPgs5qIEdqIP2XDZg</span></td><td><span class="coord">52.2535711, 20.9845617</span></td><td>"Dzika 19 Warszawa"</td></tr>
+</table>
+</div>
+
+<!-- ============================================ -->
+<h2>5. My Search Process (Chronological)</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<div class="step"><span class="step-num">Step 1.</span> Searched "Dodo Pizza al Jana Pawla II Warszawa" → found place → clicked SV → got panorama at JP2 #18. Looked in all 4 directions (N/E/S/W). Found Dodo Pizza orange sign facing east.</div>
+
+<div class="step"><span class="step-num">Step 2.</span> Searched "Jana Pawla II 20 Warszawa" → found place → clicked SV → got panorama ~90m north. Saw no-stopping sign looking north. Saw bollards + bus lane looking south. Saw TRYCHOLOGIA clinic looking east.</div>
+
+<div class="step"><span class="step-num">Step 3.</span> For Dodo Pizza area, concluded: service road east side of JP2 is the area to stop. Picked the north-facing view from Dodo Pizza panorama as the "stop spot" image.</div>
+
+<div class="step"><span class="step-num">Step 4.</span> Searched "Biedronka Dzika Warszawa" → found Dzika 4 area → SV shows calm street with parking. But coordinates show it's ~170m from Słomińskiego 19 → too far.</div>
+
+<div class="step"><span class="step-num">Step 5.</span> Searched "Dzika 19 Warszawa" → found → SV shows calmer area with "Dzika" on road. Coordinates show ~155m lat difference from Słomińskiego 19.</div>
+
+<div class="step"><span class="step-num">Step 6.</span> Ran Google Maps walking directions Dzika 19 → Słomińskiego 19 → <strong>78m, 1 min walk</strong>. This was my "aha" moment - decided this was the stop.</div>
+
+<div class="step"><span class="step-num">Step 7.</span> Looked at satellite imagery around 52.2548, 20.9855 at zoom 17-18 to understand street layout. Could see Rondo Radosława, Dzika label, Domino's Pizza. But couldn't read all street names clearly in satellite view.</div>
+
+<div class="step"><span class="step-num">Step 8.</span> Searched "Stawki 6 Warszawa" to find Dzika/Stawki intersection. Found it was at <span class="coord">52.253576, 20.991274</span> → longitude 20.991, way too far east (vs Dzika at ~20.985). Abandoned this.</div>
+
+<div class="step"><span class="step-num">Step 9.</span> Used dzika19-west.jpg as hero image (shows "Dzika" on road) and dzika19-north-wide.jpg as "toward Słomińskiego" direction.</div>
+</div>
+
+<!-- ============================================ -->
+<h2>6. What I'm Unsure About</h2>
+<!-- ============================================ -->
+
+<div class="section question">
+<h3>Rondo ONZ</h3>
+<ul>
+<li>Where exactly is the handicapped parking the user mentioned?</li>
+<li>Is there ANY legal stop/pullover on the JP2 service road near Dodo Pizza?</li>
+<li>Should I explore ul. Twarda or another side street as the actual stopping location?</li>
+<li>Which side of JP2 is actually drivable / stoppable when approaching from the south?</li>
+<li>Is the metro exit on the east or west side of JP2?</li>
+</ul>
+
+<h3>Słomińskiego / Dzika</h3>
+<ul>
+<li>Is my Street View at "Dzika 19" actually on ul. Dzika? The road text says "Dzika" but maybe it's at an intersection with another street?</li>
+<li>What is between Dzika 19 and Słomińskiego 19? Google says 78m walk - is there a direct path?</li>
+<li>The user says "not to the south" - is the clinic entrance on a different side than I think?</li>
+<li>Should the instructions say "walk west" or "walk east" instead of "south"?</li>
+<li>Is there a closer spot on Dzika that I should use?</li>
+</ul>
+</div>
+
+<!-- ============================================ -->
+<h2>7. Technical Limitations I Hit</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<ul>
+<li><strong>No SV walking</strong> - Can't move forward/backward in Street View via DevTools MCP. Can only teleport to new places by searching.</li>
+<li><strong>Limited SV points</strong> - Only get SV where Google has a place/address with coverage. For the ~100m stretch of JP2 between #18 and #20, I only had 2 viewpoints.</li>
+<li><strong>Satellite imagery hard to read</strong> - Street names, signs, and parking markings aren't visible in the satellite zoom levels I used.</li>
+<li><strong>No Street View layer</strong> - Couldn't see the blue lines on the map that show SV coverage to plan my exploration.</li>
+<li><strong>Heading interpretation</strong> - I used heading values (0=N, 90=E, 180=S, 270=W) from the URL, but these are relative to true north. I'm trusting Google's heading values are correct.</li>
+</ul>
+</div>
+
+<div class="section" style="margin-top: 40px; text-align: center; color: #666;">
+<p>End of debug report. Please tell me where my mental model is wrong!</p>
+</div>
+
+</div>
+</body>
+</html>
