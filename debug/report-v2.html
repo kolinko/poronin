@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street View Research v2 - Corrected Mental Model</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #ccc; line-height: 1.7; padding: 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #ff6b6b; margin-bottom: 8px; }
+h2 { color: #ffd93d; margin: 32px 0 12px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+h3 { color: #6bcbff; margin: 20px 0 8px; }
+p, li { margin-bottom: 8px; }
+ul, ol { margin-left: 24px; }
+.subtitle { color: #888; font-size: 0.9em; margin-bottom: 24px; }
+.section { background: #111; border: 1px solid #222; border-radius: 8px; padding: 20px; margin: 16px 0; }
+.error { border-left: 4px solid #ff6b6b; }
+.success { border-left: 4px solid #4ecdc4; }
+.question { border-left: 4px solid #ffd93d; }
+.correction { border-left: 4px solid #ff6b6b; background: #1a0a0a; }
+.screenshot { margin: 12px 0; }
+.screenshot img { max-width: 100%; border-radius: 6px; border: 1px solid #333; }
+.screenshot .cap { font-size: 0.85em; color: #888; margin-top: 4px; }
+.coord { font-family: monospace; background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #4ecdc4; }
+.pano-id { font-family: monospace; background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #ffd93d; font-size: 0.85em; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { padding: 8px 12px; text-align: left; border: 1px solid #333; }
+th { background: #1a1a2e; color: #6bcbff; }
+td { background: #111; }
+code { background: #1a1a2e; padding: 2px 6px; border-radius: 3px; color: #4ecdc4; }
+a { color: #6bcbff; }
+.map-container { background: #0d0d1a; border-radius: 8px; padding: 16px; margin: 16px 0; overflow-x: auto; }
+.map-container svg { display: block; margin: 0 auto; }
+.step { background: #0d0d1a; padding: 12px 16px; margin: 8px 0; border-radius: 6px; border-left: 3px solid #444; }
+.legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 8px 0; font-size: 0.9em; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-swatch { width: 24px; height: 4px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Street View Research v2</h1>
+<div class="subtitle">Corrected mental model after user feedback | 2026-02-18</div>
+
+<!-- ============================================ -->
+<h2>1. Dzika Street - Actual Geometry (from OpenStreetMap)</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<p>I queried the <a href="https://overpass-api.de/">Overpass API</a> for all OSM ways named "Dzika" in Warsaw. The street consists of 10 segments. Here's the actual shape plotted from coordinates:</p>
+</div>
+
+<div class="map-container">
+<svg viewBox="0 0 800 500" width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background grid -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1a1a2e" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="#0a0a14"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+
+  <!-- Compass -->
+  <g transform="translate(740, 40)">
+    <line x1="0" y1="20" x2="0" y2="-20" stroke="#666" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="0" y="-25" text-anchor="middle" fill="#888" font-size="12">N</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#888"/></marker></defs>
+
+  <!-- Scale bar -->
+  <line x1="600" y1="470" x2="713" y2="470" stroke="#666" stroke-width="2"/>
+  <line x1="600" y1="465" x2="600" y2="475" stroke="#666" stroke-width="2"/>
+  <line x1="713" y1="465" x2="713" y2="475" stroke="#666" stroke-width="2"/>
+  <text x="656" y="465" text-anchor="middle" fill="#888" font-size="11">~100m</text>
+
+  <!--
+    Coordinate mapping:
+    lat range: 52.2515 - 52.2555 (0.004 = ~444m)
+    lon range: 52.2515 - 52.2555
+    lon range: 20.9810 - 20.9890 (0.008 = ~533m)
+
+    x = (lon - 20.9810) / 0.0080 * 760 + 20
+    y = (52.2555 - lat) / 0.0040 * 460 + 20
+  -->
+
+  <!-- Way 1019857560 (tertiary) - western end, roughly N-S -->
+  <polyline points="
+    58,285  62,286  66,287  69,288  76,290
+  " fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 144340721 (tertiary) -->
+  <polyline points="
+    116,284  100,285  88,285
+  " fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 138607771 (tertiary) -->
+  <polyline points="
+    150,280  148,280  134,282  124,283  116,284
+  " fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 4941089 (tertiary, oneway) - NE to SW bend -->
+  <polyline points="
+    196,269  188,270  187,270  184,271  181,272  174,276  172,277  150,280
+  " fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 138607781 (tertiary, oneway) - from junction going east -->
+  <polyline points="
+    150,280  152,279  153,279  155,277  158,275  159,274  160,273  161,270
+  " fill="none" stroke="#ff6b6b" stroke-width="3" stroke-linecap="round" stroke-dasharray="8,4"/>
+
+  <!-- Way 25580770 (residential, oneway) - bend going NE to D19 -->
+  <polyline points="
+    247,270  254,267  256,266  257,266  266,261
+  " fill="none" stroke="#4ecdc4" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 138607755 (residential, oneway) - from D19 going west -->
+  <polyline points="
+    266,261  266,263  264,265  264,265  264,266  264,266  262,267
+  " fill="none" stroke="#4ecdc4" stroke-width="3" stroke-linecap="round" stroke-dasharray="8,4"/>
+
+  <!-- Way 1171764817 (residential) - short connector at D19 -->
+  <polyline points="
+    266,261  271,258
+  " fill="none" stroke="#4ecdc4" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 138607750 (residential) - from D19 going NE -->
+  <polyline points="
+    271,258  283,250  327,240  328,239  329,239  328,239
+  " fill="none" stroke="#4ecdc4" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Way 25580772 (residential) - long SE diagonal -->
+  <polyline points="
+    328,239  329,238  330,237  332,236  336,234
+    345,229  370,218  389,211  417,199
+    454,184  457,183  467,177  470,176  473,175  479,172
+  " fill="none" stroke="#4ecdc4" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- CLINIC marker (Słomińskiego 19) -->
+  <circle cx="271" cy="153" r="8" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+  <circle cx="271" cy="153" r="3" fill="#ff6b6b"/>
+  <text x="283" y="148" fill="#ff6b6b" font-size="13" font-weight="bold">CLINIC</text>
+  <text x="283" y="163" fill="#ff6b6b" font-size="11">Słomińskiego 19</text>
+  <text x="283" y="176" fill="#888" font-size="10">52.2550, 20.9845</text>
+
+  <!-- Dzika 19 marker -->
+  <circle cx="271" cy="258" r="8" fill="none" stroke="#ffd93d" stroke-width="2"/>
+  <circle cx="271" cy="258" r="3" fill="#ffd93d"/>
+  <text x="283" y="253" fill="#ffd93d" font-size="13" font-weight="bold">DZIKA 19</text>
+  <text x="283" y="268" fill="#ffd93d" font-size="11">SV panorama position</text>
+  <text x="283" y="281" fill="#888" font-size="10">52.2536, 20.9846</text>
+
+  <!-- Dashed line showing 156m between clinic and D19 -->
+  <line x1="271" y1="163" x2="271" y2="248" stroke="#666" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="230" y="210" fill="#666" font-size="11" text-anchor="end">156m due south</text>
+  <text x="230" y="222" fill="#666" font-size="11" text-anchor="end">(same longitude!)</text>
+
+  <!-- 90° CORNER annotation -->
+  <rect x="120" y="245" width="120" height="50" rx="4" fill="#1a1a2e" stroke="#ffd93d" stroke-width="1"/>
+  <text x="180" y="263" text-anchor="middle" fill="#ffd93d" font-size="12" font-weight="bold">90° CORNER</text>
+  <text x="180" y="279" text-anchor="middle" fill="#888" font-size="10">╚ shape (opens east)</text>
+  <line x1="240" y1="270" x2="258" y2="264" stroke="#ffd93d" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Western end label -->
+  <text x="30" y="305" fill="#ff6b6b" font-size="10">W end (lon 20.981)</text>
+
+  <!-- SE end label -->
+  <text x="490" y="170" fill="#4ecdc4" font-size="10">SE end (lon 20.988)</text>
+  <text x="490" y="183" fill="#888" font-size="10">toward Anielewicza</text>
+
+  <!-- Słomińskiego road indication -->
+  <line x1="150" y1="153" x2="400" y2="153" stroke="#555" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="405" y="157" fill="#555" font-size="10">ul. Słomińskiego (busy, no stopping)</text>
+
+</svg>
+
+<div class="legend" style="margin-top: 12px;">
+  <div class="legend-item"><div class="legend-swatch" style="background:#ff6b6b;"></div> Tertiary road segments</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#4ecdc4;"></div> Residential road segments</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#666; height:2px; border-top: 2px dashed #666;"></div> Dashed = oneway (reverse direction)</div>
+</div>
+</div>
+
+<div class="section correction">
+<h3>What I got wrong (v1)</h3>
+<p>My original mental model had Dzika as a <strong>straight north-south street</strong> with the clinic directly above Dzika 19. I drew the 90° corner as <code>╝</code> (opening west). Both were wrong:</p>
+<ul>
+<li>Dzika is a <strong>boomerang/V shape</strong> - E-W tertiary road on the west, bending into a long SE diagonal on the east</li>
+<li>The corner opens <strong>east</strong> (<code>╚</code> shape), not west</li>
+<li>Dzika 19 sits at the <strong>apex of the bend</strong>, not on a straight N-S segment</li>
+<li>The clinic IS directly north of D19 (same longitude, 156m) - but my description "walk south on Dzika" was misleading because Dzika doesn't go straight north from D19 toward the clinic</li>
+</ul>
+</div>
+
+<div class="section question">
+<h3>Open questions about Dzika</h3>
+<ul>
+<li><strong>Walking route:</strong> Google says 78m/1min from D19 to clinic "via Dzika." But Dzika doesn't go straight north. Is there a footpath/sidewalk cutting north from D19 to Słomińskiego? Or does Marta walk along the SE diagonal part of Dzika and then turn north on another street?</li>
+<li><strong>Best stopping spot:</strong> Is D19 (at the bend) the right place? Or should I look at the SE diagonal part which seems to be a calm residential street with parking?</li>
+<li><strong>Which side of the street?</strong> Several segments are one-way. Where would I be driving from, and which curb would I stop at?</li>
+</ul>
+</div>
+
+<!-- ============================================ -->
+<h2>2. Rondo ONZ / Dodo Pizza - Corrected Model</h2>
+<!-- ============================================ -->
+
+<div class="section correction">
+<h3>What I got wrong</h3>
+<ul>
+<li><strong>Blue marks = handicapped parking.</strong> I saw blue painted rectangles on the pavement near Dodo Pizza and thought they were decorative. They're handicapped parking spots.</li>
+<li><strong>No legal stopping nearby</strong> - but user confirms there are practical spots north of Twarda where you can briefly stop without blocking traffic.</li>
+</ul>
+</div>
+
+<div class="section success">
+<h3>What user confirmed</h3>
+<p>"There is no decent legal stopping there, but a bit north of Twarda there are places where you can stop and not cause problems to traffic."</p>
+<p>So the approach is correct (service road, north of Twarda), I just need to find the exact spot that works practically.</p>
+</div>
+
+<h3>All Street View shots from Rondo ONZ area</h3>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dodo-east.jpg" alt="Heading 90° East">
+<div class="cap"><strong>Dodo Pizza, heading 90° (East)</strong><br>Orange DODO PIZZA sign. Carrefour + Shanga to the right.<br><span class="coord">52.2339, 20.9983</span> <span class="pano-id">3GGPaDquh6yJRtueKxGkXw</span></div>
+</div>
+<div class="screenshot">
+<img src="dodo-north-stop.jpg" alt="Heading 10° NNE">
+<div class="cap"><strong>Dodo Pizza, heading 10° (NNE)</strong><br>Service road looking north. PEPSI sign, shops. <span style="color:#ff6b6b">Blue handicapped parking visible on pavement!</span><br><span class="coord">52.2339, 20.9983</span></div>
+</div>
+</div>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dodo-south.jpg" alt="Heading 180° South">
+<div class="cap"><strong>Dodo Pizza, heading 180° (South)</strong><br>Looking south toward Twarda / Rondo ONZ.<br><span class="coord">52.2339, 20.9983</span></div>
+</div>
+<div class="screenshot">
+<img src="dodo-west.jpg" alt="Heading 270° West">
+<div class="cap"><strong>Dodo Pizza, heading 270° (West)</strong><br>Looking west across main JP2 avenue.<br><span class="coord">52.2339, 20.9983</span></div>
+</div>
+</div>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="jp2-20-south-service.jpg" alt="JP2 #20, heading 170° SSE">
+<div class="cap"><strong>JP2 #20, heading 170° (SSE)</strong><br>~90m north of Dodo Pizza. Bollards, red bus lane, mural building.<br><span class="coord">52.2347, 20.9980</span> <span class="pano-id">nksxhPQqTZlZVDL6ZC7fEQ</span></div>
+</div>
+<div class="screenshot">
+<img src="jp2-20-north-service.jpg" alt="JP2 #20, heading 350° NNW">
+<div class="cap"><strong>JP2 #20, heading 350° (NNW)</strong><br><span style="color:#ff6b6b">NO STOPPING sign!</span> Cars parked on right side despite it.<br><span class="coord">52.2347, 20.9980</span></div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<h2>3. Dzika / Słomińskiego - All Street View Shots</h2>
+<!-- ============================================ -->
+
+<h3>Dzika 19 (at the bend) - <span class="pano-id">mzKD8tPgs5qIEdqIP2XDZg</span></h3>
+<p>Position: <span class="coord">52.2536, 20.9846</span> — right at the apex of Dzika's bend</p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika19-west.jpg" alt="Heading 270° West">
+<div class="cap"><strong>Heading 270° (West)</strong><br>"DZIKA" painted on road. Looking along the E-W part toward the western N-S section. Parked cars both sides, intersection ahead.</div>
+</div>
+<div class="screenshot">
+<img src="dzika19-north-wide.jpg" alt="Heading 350° NNW">
+<div class="cap"><strong>Heading 350° (NNW)</strong><br>Looking north. Van + silver car, crosswalk, no-entry sign. This is toward the clinic but Dzika doesn't go this way — this view is across the block, not along the street.</div>
+</div>
+</div>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika19-east.jpg" alt="Heading 90° East">
+<div class="cap"><strong>Heading 90° (East)</strong><br>Looking east along the SE-going part of Dzika. Trees, parked cars. This is the residential diagonal segment.</div>
+</div>
+<div class="screenshot">
+<img src="dzika19-south.jpg" alt="Heading 180° South">
+<div class="cap"><strong>Heading 180° (South)</strong><br>Looking south. White car, van, trees. There's no Dzika road going south from here - this is looking at buildings/parking between blocks.</div>
+</div>
+</div>
+
+<h3>Dzika / Biedronka (further SE on the diagonal) - <span class="pano-id">R3ntO-LPLSRfhFUeX2A-5w</span></h3>
+<p>Position: <span class="coord">52.2528, 20.9872</span> — on the long SE diagonal, ~170m from clinic</p>
+
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika-biedronka-sv.jpg" alt="Biedronka area">
+<div class="cap"><strong>Dzika near Biedronka</strong><br>On the SE diagonal segment. Street with buildings.</div>
+</div>
+<div class="screenshot">
+<img src="dzika-north.jpg" alt="Looking NW up the diagonal">
+<div class="cap"><strong>Looking NW up the diagonal</strong><br>Calm street, P (parking) sign visible, cars parked both sides. This is looking back toward D19 along the diagonal.</div>
+</div>
+</div>
+
+<h3>Google Maps evidence</h3>
+<div class="grid-2">
+<div class="screenshot">
+<img src="dzika19-to-slom19-directions.jpg" alt="Walking directions">
+<div class="cap"><strong>Walking: Dzika 19 → Słomińskiego 19</strong><br>Google says: 1 min, 78m, "przez: Dzika". But how? Dzika doesn't go straight north. There might be a pedestrian path cutting through.</div>
+</div>
+<div class="screenshot">
+<img src="dzika-slominskiego-map.jpg" alt="Satellite view">
+<div class="cap"><strong>Satellite view of the area</strong><br>Shows Rondo Radosława, buildings between Dzika and Słomińskiego. Hard to see pedestrian paths at this zoom.</div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<h2>4. All Panorama IDs Collected</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<table>
+<tr><th>Location</th><th>Panorama ID</th><th>Coordinates</th><th>How I got there</th></tr>
+<tr><td>Dodo Pizza (JP2 #18)</td><td><span class="pano-id">3GGPaDquh6yJRtueKxGkXw</span></td><td><span class="coord">52.2339, 20.9983</span></td><td>Searched "Dodo Pizza al Jana Pawla II" → SV button</td></tr>
+<tr><td>JP2 #20</td><td><span class="pano-id">nksxhPQqTZlZVDL6ZC7fEQ</span></td><td><span class="coord">52.2347, 20.9980</span></td><td>Searched "Jana Pawla II 20" → SV button</td></tr>
+<tr><td>Narbutta 32</td><td><span class="pano-id">aV1IRla03sNi-3mnJbiL1A</span></td><td><span class="coord">52.2061, 21.0150</span></td><td>Searched "Narbutta 32" → SV button</td></tr>
+<tr><td>Słomińskiego 19</td><td><span class="pano-id">FlW1LM0IbGMh5RS5uKThGQ</span></td><td><span class="coord">52.2550, 20.9845</span></td><td>Searched "Słomińskiego 19" → SV button</td></tr>
+<tr><td>Dzika / Biedronka</td><td><span class="pano-id">R3ntO-LPLSRfhFUeX2A-5w</span></td><td><span class="coord">52.2528, 20.9872</span></td><td>Searched "Biedronka Dzika" → SV button</td></tr>
+<tr><td>Dzika 19</td><td><span class="pano-id">mzKD8tPgs5qIEdqIP2XDZg</span></td><td><span class="coord">52.2536, 20.9846</span></td><td>Searched "Dzika 19" → SV button</td></tr>
+</table>
+</div>
+
+<!-- ============================================ -->
+<h2>5. Technical Notes</h2>
+<!-- ============================================ -->
+
+<div class="section">
+<h3>How I navigate Street View</h3>
+<p>Chrome DevTools MCP can take screenshots and click elements, but <strong>can't walk in Street View</strong> (arrow keys and canvas clicks don't work). My workaround:</p>
+<ol>
+<li>Search for a place/address → click "Street View" button on place card → get panorama ID</li>
+<li>Change heading by modifying the URL parameter (0°=N, 90°=E, 180°=S, 270°=W)</li>
+<li>To "move", search for a nearby address and repeat</li>
+</ol>
+<p>This means I can only view SV at locations where Google has searchable places. I can't freely explore between them.</p>
+
+<h3>Data sources used</h3>
+<ul>
+<li><strong>Google Maps Street View</strong> - via Chrome DevTools MCP (panorama screenshots)</li>
+<li><strong>Google Maps</strong> - satellite imagery, place search, walking directions</li>
+<li><strong>OpenStreetMap Overpass API</strong> - street geometry (coordinates of all road segments)</li>
+<li><strong>OSM Nominatim</strong> - geocoding (tried first, returned incomplete data)</li>
+</ul>
+
+<h3>Alternative explored but not used</h3>
+<ul>
+<li><strong><a href="https://www.mapillary.com/">Mapillary</a></strong> - crowd-sourced street-level imagery (Meta). Dense coverage in Warsaw. Has a Graph API for programmatic access. I tried it but my access token was invalid. Could be useful for seeing recent street conditions, parking signs, etc.</li>
+<li><strong>Apple Maps Look Around</strong> - available in Warsaw via beta.maps.apple.com. The binoculars button didn't appear in my browser session.</li>
+</ul>
+</div>
+
+<div class="section" style="margin-top: 40px; text-align: center; color: #666;">
+<p>End of v2 report. Awaiting corrections!</p>
+</div>
+
+</div>
+</body>
+</html>
