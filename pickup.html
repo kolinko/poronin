@@ -15,6 +15,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .car-section { background: #1a2a3a; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; }
 .car-section img { max-width: 100%; border-radius: 8px; margin: 12px 0; }
 .car-section h2 { color: #c0392b; margin-bottom: 8px; }
+.car-section .plate { display: inline-block; background: #fff; color: #000; font-weight: 900; font-size: 1.3em; padding: 6px 18px; border-radius: 6px; border: 3px solid #1a3a6a; letter-spacing: 2px; margin-top: 8px; font-family: monospace; }
 .pickup-card { background: #1a2a3a; border-radius: 12px; margin: 24px 0; overflow: hidden; border-left: 4px solid #c0392b; }
 .pickup-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
 .pickup-number { background: #c0392b; color: white; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4em; font-weight: bold; flex-shrink: 0; }
@@ -38,9 +39,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .route-step .step-time { color: #c0392b; font-weight: 700; min-width: 50px; }
 .route-step .step-icon { font-size: 1.2em; }
 .route-step .step-text { color: #ccc; }
-.group-section { text-align: center; margin: 32px 0; }
-.group-section img { max-width: 100%; border-radius: 12px; margin: 12px 0; }
-.group-section h2 { color: #fff; margin-bottom: 8px; }
 .footer { text-align: center; padding: 24px; color: #556; font-size: 0.85em; }
 @media (max-width: 600px) {
   .images-grid { grid-template-columns: 1fr; }
@@ -54,19 +52,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div class="hero">
   <h1>XXIII Poronin - Zima 2026</h1>
   <div class="subtitle">Pickup Plan</div>
-  <div class="date">Piątek, 20 lutego 2026 / Friday, Feb 20, 2026</div>
+  <div class="date">Friday, Feb 20, 2026</div>
 </div>
 
 <div class="container">
 
 <div class="car-section">
-  <h2>Nasz wóz / Our ride</h2>
-  <p>Red MINI Countryman S - dwa czarne paski na masce / two black stripes on the hood</p>
+  <h2>Our ride</h2>
+  <p>Red MINI Countryman S - two black stripes on the hood</p>
   <img src="img/mini.jpg" alt="Red Mini Countryman S">
+  <div class="plate">WX8689C</div>
 </div>
 
 <div class="route-summary">
-  <h2>Trasa / Route</h2>
+  <h2>Route</h2>
   <div class="route-step">
     <span class="step-time">12:25</span>
     <span class="step-icon">🏠</span>
@@ -75,27 +74,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="route-step">
     <span class="step-time">~15 min</span>
     <span class="step-icon">🚗</span>
-    <span class="step-text">Przez Puławską na północ / North via Puławska</span>
+    <span class="step-text">North via Puławska</span>
   </div>
   <div class="route-step">
     <span class="step-time">12:40</span>
     <span class="step-icon">🚇</span>
-    <span class="step-text"><strong>Magda</strong> - Metro Rondo ONZ, wyjście przy Dodo Pizza</span>
+    <span class="step-text"><strong>Magda</strong> - Metro Rondo ONZ, exit near Dodo Pizza</span>
   </div>
   <div class="route-step">
     <span class="step-time">~15 min</span>
     <span class="step-icon">🚗</span>
-    <span class="step-text">Al. Jana Pawła II na północ / North via Jana Pawła II</span>
+    <span class="step-text">North via al. Jana Pawła II</span>
   </div>
   <div class="route-step">
     <span class="step-time">12:55</span>
     <span class="step-icon">🏥</span>
-    <span class="step-text"><strong>Marta</strong> - Słomińskiego 19, klinika / clinic</span>
+    <span class="step-text"><strong>Marta</strong> - Słomińskiego 19, clinic</span>
   </div>
   <div class="route-step">
     <span class="step-time">~13:00</span>
     <span class="step-icon">🛣️</span>
-    <span class="step-text">Na S7/S8 w kierunku Krakowa / Onto S7/S8 towards Kraków</span>
+    <span class="step-text">Onto S7/S8 towards Kraków</span>
   </div>
 </div>
 
@@ -110,20 +109,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     </div>
   </div>
   <div class="pickup-body">
-    <p>Mati wychodzi z domu. Narbutta to spokojna ulica jednokierunkowa z miejscami parkingowymi po obu stronach. Podjadę pod sam budynek - jest dużo miejsca, żeby się zatrzymać przy krawężniku.</p>
     <p>Mati exits from home. Narbutta is a calm one-way residential street with parking on both sides. I'll pull up right in front of the building - plenty of space to stop at the curb.</p>
-    <div class="tip"><strong>Tip:</strong> Narbutta jest jednokierunkowa - jadę od strony Puławskiej. / Narbutta is one-way - I'll approach from Puławska side.</div>
+    <div class="tip"><strong>Tip:</strong> Narbutta is one-way - I'll approach from the Puławska side (driving east).</div>
     <div class="images-grid">
       <div>
-        <img src="img/narbutta-sat.jpg" alt="Narbutta 32 - satellite view">
-        <div class="caption">Widok satelitarny / Satellite view</div>
+        <img src="img/narbutta-sv.jpg" alt="Narbutta 32 - building with parking">
+        <div class="caption">Building at Narbutta - parked car shows where I'll stop</div>
       </div>
       <div>
-        <img src="img/narbutta-sv.jpg" alt="Narbutta 32 - street view">
-        <div class="caption">Street View - spokojna ulica z parkowaniem / calm street with parking</div>
+        <img src="img/narbutta-street.jpg" alt="Narbutta street perspective">
+        <div class="caption">Street view approaching from Puławska side</div>
       </div>
     </div>
-    <a class="map-link" href="https://maps.google.com/?q=Ludwika+Narbutta+32,+Warszawa&ll=52.2063,21.0149" target="_blank">📍 Otwórz w Google Maps</a>
+    <a class="map-link" href="https://maps.google.com/?q=Ludwika+Narbutta+32,+Warszawa&ll=52.2063,21.0149" target="_blank">📍 Open in Google Maps</a>
   </div>
 </div>
 
@@ -134,24 +132,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="pickup-info">
       <h2>Magda - Metro Rondo ONZ</h2>
       <div class="time">12:40</div>
-      <div class="address">al. Jana Pawła II 18 (przy Dodo Pizza), 00-824 Warszawa</div>
+      <div class="address">al. Jana Pawła II 18 (near Dodo Pizza), 00-824 Warszawa</div>
     </div>
   </div>
   <div class="pickup-body">
-    <p>Magda wychodzi z metra Rondo ONZ. Wyjście blisko Dodo Pizza (al. Jana Pawła II 18). Zatrzymam się na al. Jana Pawła II po zachodniej stronie, tuż przed skrzyżowaniem z Twardą - jest tam krótki odcinek, gdzie można się zatrzymać.</p>
-    <p>Magda exits metro Rondo ONZ. Exit near Dodo Pizza (al. Jana Pawła II 18). I'll stop on al. Jana Pawła II on the west side, just before the Twarda intersection - there's a short stretch where you can pull over.</p>
-    <div class="tip"><strong>Tip:</strong> Centrum miasta - lepiej nie stać za długo! Magda, bądź gotowa. 😄 / City center - best not to linger! Magda, be ready. 😄</div>
+    <p>Magda exits metro Rondo ONZ. The exit is near <strong>Dodo Pizza</strong> (orange sign, al. Jana Pawła II 18) - look for Carrefour and Shanga next to it. I'll stop on al. Jana Pawła II on the right side, just north of the Twarda intersection (~20m).</p>
+    <div class="tip"><strong>Tip:</strong> City center - can't linger! Magda, be ready at the exit when you see me pull up.</div>
     <div class="images-grid">
       <div>
-        <img src="img/rondo-onz-sat.jpg" alt="Rondo ONZ - satellite view">
-        <div class="caption">Widok satelitarny - Dodo Pizza po lewej / Satellite - Dodo Pizza on the left</div>
+        <img src="img/rondo-onz-dodo.jpg" alt="Dodo Pizza storefront">
+        <div class="caption">Dodo Pizza (orange sign) - Magda exits here. Carrefour + Shanga next door.</div>
       </div>
       <div>
-        <img src="img/rondo-onz-sv.jpg" alt="Rondo ONZ - street view">
-        <div class="caption">Street View - al. Jana Pawła II</div>
+        <img src="img/rondo-onz-avenue.jpg" alt="al. Jana Pawła II looking south">
+        <div class="caption">al. Jana Pawła II looking south toward Rondo ONZ</div>
       </div>
     </div>
-    <a class="map-link" href="https://maps.google.com/?q=Dodo+Pizza+Jana+Pawla+II+Warszawa&ll=52.2338,20.9986" target="_blank">📍 Otwórz w Google Maps</a>
+    <a class="map-link" href="https://maps.google.com/?q=Dodo+Pizza+Jana+Pawla+II+Warszawa&ll=52.2338,20.9986" target="_blank">📍 Open in Google Maps</a>
   </div>
 </div>
 
@@ -162,43 +159,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="pickup-info">
       <h2>Marta - Słomińskiego 19</h2>
       <div class="time">12:55</div>
-      <div class="address">ul. Zygmunta Słomińskiego 19, 00-195 Warszawa (klinika psychologiczna / psychology clinic)</div>
+      <div class="address">ul. Zygmunta Słomińskiego 19, 00-195 Warszawa (clinic building)</div>
     </div>
   </div>
   <div class="pickup-body">
-    <p>Marta wychodzi z kliniki. Budynek przy Słomińskiego 19 to duży biurowiec z wieloma gabinetami lekarskimi. Jest parking przed budynkiem, a od strony ul. Dzikiej jest spokojniej - można tam podjechać i stanąć.</p>
-    <p>Marta exits from the clinic. Słomińskiego 19 is a large office building with many medical practices. There's parking in front, and ul. Dzika side is calmer - you can pull up and stop there.</p>
-    <div class="tip"><strong>Tip:</strong> Blisko Ronda Radosława i wjazdu na trasę. Stąd szybko na S7! / Near Rondo Radosława and highway entrance. Quick access to S7 from here!</div>
+    <p>Marta exits from the clinic. Słomińskiego 19 is a large office building with many medical practices (Babka Medica, Centrum Terapii Dialog, ASTRAMED). I'll pull up on the side street (ul. Dzika) where it's calmer.</p>
+    <div class="tip"><strong>Tip:</strong> Near Rondo Radosława and highway entrance. Quick access to S7 from here!</div>
     <div class="images-grid">
       <div>
-        <img src="img/slominskiego-sat.jpg" alt="Słomińskiego 19 - satellite view">
-        <div class="caption">Widok satelitarny / Satellite view</div>
+        <img src="img/slominskiego-building.jpg" alt="Słomińskiego 19 building">
+        <div class="caption">Building entrance at Słomińskiego 19</div>
       </div>
       <div>
-        <img src="img/slominskiego-sv.jpg" alt="Słomińskiego 19 - street view">
-        <div class="caption">Street View - ul. Dzika, parking obok budynku / parking beside building</div>
+        <img src="img/slominskiego-road.jpg" alt="Road near Słomińskiego 19">
+        <div class="caption">Road view - Domino's Pizza visible as landmark</div>
       </div>
     </div>
-    <a class="map-link" href="https://maps.google.com/?q=Słomińskiego+19,+Warszawa&ll=52.2543,20.9856" target="_blank">📍 Otwórz w Google Maps</a>
+    <a class="map-link" href="https://maps.google.com/?q=Słomińskiego+19,+Warszawa&ll=52.2543,20.9856" target="_blank">📍 Open in Google Maps</a>
   </div>
-</div>
-
-<div class="group-section">
-  <h2>Na Poronin! 🎿</h2>
-  <img src="img/group-car.jpg" alt="Four of us in the car">
-  <p style="color: #888; margin-top: 8px;">Wizualizacja artystyczna / artistic visualization 😄</p>
-</div>
-
-<div class="group-section">
-  <img src="img/group-hotel.jpg" alt="Group at the hotel">
-  <p style="color: #888; margin-top: 8px;">ParkHotel Łysoń, Poronin - pokoje 130 i 139 / rooms 130 & 139</p>
 </div>
 
 </div>
 
 <div class="footer">
   <p>XXIII Poronin - Zima 2026 | ParkHotel Łysoń, Poronin</p>
-  <p>Piątek 20.02 - Niedziela 22.02 | <a href="index.html" style="color: #c0392b;">Trip brief (EN)</a> | <a href="pl.html" style="color: #c0392b;">Trip brief (PL)</a></p>
+  <p>Fri 20.02 - Sun 22.02 | <a href="index.html" style="color: #c0392b;">Trip brief (EN)</a> | <a href="pl.html" style="color: #c0392b;">Trip brief (PL)</a></p>
 </div>
 
 </body>
