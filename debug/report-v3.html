@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Research v3 - ASCII Maps</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    color: #c8c8c8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    color: #e0e0e0;
+    font-size: 22px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+  }
+  h2 {
+    color: #aaa;
+    font-size: 16px;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 4px;
+  }
+  h3 {
+    color: #888;
+    font-size: 14px;
+    margin-top: 18px;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .map-container {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  pre.map {
+    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+    font-size: 9px;
+    line-height: 1.25;
+    color: #8fa;
+    white-space: pre;
+    margin: 0;
+    tab-size: 4;
+  }
+  pre.map .landmark { color: #ff6; }
+  .legend {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .legend span.sym { color: #8fa; font-weight: bold; display: inline-block; width: 24px; text-align: center; }
+  .legend span.sym-yellow { color: #ff6; font-weight: bold; display: inline-block; width: 24px; text-align: center; }
+  .legend span.sym-blue { color: #6af; font-weight: bold; display: inline-block; width: 24px; text-align: center; }
+  .legend span.desc { color: #999; }
+  .notes {
+    background: #0f1612;
+    border: 1px solid #2a4a3a;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .notes li {
+    margin-bottom: 4px;
+    margin-left: 16px;
+    color: #b0c8b8;
+  }
+  .notes strong { color: #8fa; }
+  .notes .warn { color: #fa8; }
+  .stat {
+    display: inline-block;
+    background: #1a1a2a;
+    border: 1px solid #334;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin: 2px 4px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #aaf;
+  }
+  .section-divider {
+    border: 0;
+    border-top: 1px solid #222;
+    margin: 30px 0;
+  }
+  .coord {
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+  }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    pre.map { font-size: 7px; line-height: 1.15; }
+    .legend { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Street Research v3 - ASCII Maps</h1>
+<div class="subtitle">Dzika / Slominskiego area, Warsaw &mdash; generated from Overpass API data &mdash; 2026-02-18</div>
+
+<!-- ============================================================ -->
+<h2>Map 1: Dzika / Slominskiego / Rondo Radoslaw</h2>
+
+<div class="map-container">
+<pre class="map">
+    N
+    ^
+    |        Bounding box: 52.2505-52.2575 N, 20.9815-20.9895 E
+    |        Scale: ~80m per 10 chars horizontally, ~20m per line vertically
+
+
+
+
+
+
+                                                       ═
+                                                     ══
+                                                   ══
+                                                ═══
+                                         SLOMINSKIEGO
+                                        ════
+                                     ═══
+                              [CLINIC]
+            [RONDO]          <span style="color:#ff6">@</span>════
+             OO OO        ═══+
+             O O O    ════   +
+             OO║O═════       -~
+               ║             - ~~
+                ║             -  ~~~~
+                 ║            KOLBERGERA
+                  ║║          -        ~~+··
+                    ║         <span style="color:#ff6">@</span>··········   ···
+             DZIKA···++     [D19]              ···
+             ····      +····                      ··
+                        ║                           ··
+                         ║                            ····
+                          ║║ JP2                          ···
+                            ║                                ··DZIKA(SE)
+                             ║║                                ··
+                               ║║                                ··
+                                 ║║                                ·
+                                   ║
+                                    ║
+                                     ║║
+                                       ║
+                                        ║║
+</pre>
+</div>
+
+<h3>Legend</h3>
+<div class="legend">
+  <span class="sym">═</span> <span class="desc">Slominskiego (secondary, major E-W road heading ENE from Rondo)</span><br>
+  <span class="sym">║</span> <span class="desc">Al. Jana Pawla II / JP2 (secondary, major N-S road, slight NW-SE diagonal)</span><br>
+  <span class="sym">·</span> <span class="desc">Dzika (residential/tertiary, boomerang/V shape with bend at D19)</span><br>
+  <span class="sym">~</span> <span class="desc">Pasaz Krzysztofa Kolbergera (service road through block, NW from Dzika to Slominskiego)</span><br>
+  <span class="sym">-</span> <span class="desc">Footways / internal courtyard paths (D19 &rarr; Clinic walking route)</span><br>
+  <span class="sym">O</span> <span class="desc">Rondo Zgrupowania AK Radoslaw (roundabout at JP2/Slominskiego junction)</span><br>
+  <span class="sym">+</span> <span class="desc">Intersection / crossing point</span><br>
+  <span class="sym-yellow">@</span> <span class="desc">Key landmark (D19, CLINIC)</span><br>
+</div>
+
+<h3>Key Observations</h3>
+<div class="notes">
+  <ul>
+    <li><strong>Dzika has a boomerang/V shape</strong> with a ~90&deg; bend at D19.
+        The western arm runs roughly E-W, then bends sharply and the SE arm goes diagonally toward the southeast.</li>
+    <li><strong>The bend opens EAST</strong> (like a &#x255A; shape when viewed from above).
+        The V points westward, opening to the east/southeast.</li>
+    <li><strong>Clinic (Slominskiego 19) is ~<span class="stat">159m</span> due north of D19</strong> &mdash;
+        nearly the same longitude! <span class="coord">(D19: 52.25357, 20.98456 &rarr; Clinic: 52.2550, 20.9845)</span></li>
+    <li><strong>JP2 is ~<span class="stat">56m</span> west of D19</strong> (nearest point on JP2 to D19).
+        <span class="coord">(JP2 at 52.25352, 20.98374)</span></li>
+    <li><strong class="warn">Dzika does NOT go north toward the Clinic.</strong>
+        The street bends SE after D19. The walking connection to the Clinic goes through the building block
+        via internal courtyard footways (shown as <code>-</code> dashes on the map).</li>
+    <li>The <strong>Pasaz Kolbergera</strong> (service road, <code>~</code>) cuts NW through the block
+        from the Dzika/footway junction up toward Slominskiego, providing another route context.</li>
+    <li>The <strong>Rondo Zgrupowania AK Radoslaw</strong> is where JP2 meets Slominskiego.
+        Slominskiego continues ENE from the roundabout.</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>Map 2: Rondo ONZ / Dodo Pizza Area</h2>
+<p style="color:#666; font-size:12px; margin-bottom:10px;">
+  JP2 continues south. Twarda crosses E-W. Dodo Pizza at JP2 #18 (east side).
+</p>
+
+<div class="map-container">
+<pre class="map">
+    N
+    ^
+    |        Bounding box: 52.2315-52.2365 N, 20.9945-21.0025 E
+
+
+
+                                  ║
+                    [RONDO ONZ]   ║
+                      OO OO       ║
+                      O O O        ║
+                      OO OO        ║
+                                   ║
+                                    ║
+                                    ║
+                                    ║
+                                    ║ JP2
+                                    ║
+                                    ║
+                                     ║
+         TWARDA                      ║ <span style="color:#ff6">@</span> [DODO]
+    ═════════════════════════════════+═════════════════════════════════════
+                                     ║
+                                     ║
+                                     ║
+                                      ║
+                                      ║
+                                      ║
+                                      ║
+                                      ║
+                                      ║
+                                       ║
+</pre>
+</div>
+
+<h3>Legend</h3>
+<div class="legend">
+  <span class="sym">═</span> <span class="desc">Twarda (E-W road crossing JP2)</span><br>
+  <span class="sym">║</span> <span class="desc">Al. Jana Pawla II / JP2 (N-S, continuing south from Map 1)</span><br>
+  <span class="sym">O</span> <span class="desc">Rondo ONZ (roundabout north of Twarda)</span><br>
+  <span class="sym-yellow">@</span> <span class="desc">Dodo Pizza &mdash; JP2 #18, east side of JP2 just north of Twarda crossing</span><br>
+  <span class="sym">+</span> <span class="desc">Intersection (JP2 / Twarda)</span><br>
+</div>
+
+<h3>Notes</h3>
+<div class="notes">
+  <ul>
+    <li><strong>Dodo Pizza</strong> is at Al. Jana Pawla II 18, on the <strong>east side</strong> of JP2,
+        just north of the Twarda intersection. <span class="coord">(52.2339, 20.9983)</span></li>
+    <li>JP2 runs roughly N-S through both maps. Map 1 (Dzika area) is ~1.3 km north of Map 2 (Dodo area).</li>
+    <li><strong>Rondo ONZ</strong> is a major roundabout/interchange north of Twarda on JP2.</li>
+    <li>Twarda runs E-W, crossing JP2 at a signalized intersection south of Rondo ONZ.</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<h2>Distance Summary</h2>
+<div class="notes">
+  <ul>
+    <li><strong>D19 &rarr; Clinic:</strong> <span class="stat">~159m</span> straight line (due north, nearly same longitude)</li>
+    <li><strong>D19 &rarr; JP2:</strong> <span class="stat">~56m</span> west to nearest point on JP2</li>
+    <li><strong>D19 &rarr; Rondo Radoslaw:</strong> ~200m NW</li>
+    <li><strong>Map 1 area &rarr; Map 2 area:</strong> ~1.3 km along JP2 (Dzika area to Dodo Pizza area)</li>
+  </ul>
+</div>
+
+<div style="margin-top: 40px; padding-top: 12px; border-top: 1px solid #222; color: #444; font-size: 11px;">
+  Generated from Overpass API coordinate data. Grid projection uses equirectangular approximation
+  with cos(52.25&deg;) longitude correction. Character aspect ratio ~2:1 (h:w).
+  &mdash; report-v3 &mdash; 2026-02-18
+</div>
+
+</body>
+</html>
